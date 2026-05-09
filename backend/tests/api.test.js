@@ -85,22 +85,3 @@ test('admin summary is protected', async () => {
   assert.equal(summary.res.status, 200);
   assert.equal(summary.body.providers, 3);
 });
-
-
-test('integrated ML endpoints are served by the backend', async () => {
-  const detection = await api('/api/ml/detect-review', {
-    method: 'POST',
-    body: JSON.stringify({ text: 'best best best 100% real' })
-  });
-  assert.equal(detection.res.status, 200);
-  assert.equal(detection.body.isSuspicious, true);
-  assert.equal(detection.body.engine, 'backend-integrated-heuristic');
-
-  const recommendations = await api('/api/ml/recommend', {
-    method: 'POST',
-    body: JSON.stringify({ category: 'plumber', location: 'Bengaluru', emergency: true })
-  });
-  assert.equal(recommendations.res.status, 200);
-  assert.equal(recommendations.body.engine, 'backend-integrated-heuristic');
-  assert.ok(recommendations.body.providers.length >= 1);
-});

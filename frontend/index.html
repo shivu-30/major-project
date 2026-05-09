@@ -3,74 +3,83 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Smart Local Service Finder | Login</title>
+  <title>Smart Local Service Finder</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
-<body data-page="home">
-  <header class="app-header">
-    <nav class="top-nav">
-      <a class="brand" href="index.html">Smart Local Service Finder</a>
-      <button class="menu-toggle" id="menuToggle" type="button">Menu</button>
-      <div class="nav-links" id="navLinks">
-        <a href="index.html" data-nav="home">Home</a>
-        <a href="search.html" data-nav="search">Search</a>
-        <a href="bookings.html" data-nav="bookings">Bookings</a>
-        <a href="reviews.html" data-nav="reviews">Reviews</a>
-        <a href="ml.html" data-nav="ml">ML Check</a>
-        <a href="admin.html" data-nav="admin">Admin</a>
-      </div>
-      <span id="sessionLabel" class="session-pill">Guest</span>
+<body>
+  <header class="hero">
+    <nav>
+      <strong>Smart Local Service Finder</strong>
+      <span id="sessionLabel">Guest</span>
     </nav>
-    <section class="hero compact">
-      <p class="eyebrow">Two-terminal local app</p>
-      <h1>Start here, then move through each feature on its own page.</h1>
-      <p>Login once and use the navigation to search providers, create bookings, pay, review, run ML checks, and manage providers as admin.</p>
+    <section>
+      <h1>Find verified local service providers.</h1>
+      <p>Search, book, pay, and review electricians, plumbers, cleaners, carpenters, and AC technicians from one working demo UI.</p>
     </section>
   </header>
 
-  <main class="page-shell">
-    <section class="card notice">
-      <strong>Run commands:</strong>
-      <code>cd backend &amp;&amp; npm start</code>
-      <span>+</span>
-      <code>python -m http.server 8088 --directory frontend</code>
+  <main class="grid">
+    <section class="card">
+      <h2>Login / Register</h2>
+      <form id="authForm">
+        <input name="name" placeholder="Name for registration" />
+        <input name="email" type="email" value="customer@smartlocal.test" placeholder="Email" required />
+        <input name="password" type="password" value="password" placeholder="Password" required />
+        <input name="phone" placeholder="Phone" />
+        <div class="row">
+          <button type="button" id="loginBtn">Login</button>
+          <button type="button" id="registerBtn">Register</button>
+        </div>
+      </form>
     </section>
 
-    <section class="split-layout">
-      <article class="card">
-        <h2>Login / Register</h2>
-        <p class="muted">Customer demo: <code>customer@smartlocal.test</code> / <code>password</code>. Admin demo: <code>admin@smartlocal.test</code> / <code>password</code>.</p>
-        <form id="authForm">
-          <input name="name" placeholder="Name for registration" />
-          <input name="email" type="email" value="customer@smartlocal.test" placeholder="Email" required />
-          <input name="password" type="password" value="password" placeholder="Password" required />
-          <input name="phone" placeholder="Phone" />
-          <select name="role">
-            <option value="customer">Customer</option>
-            <option value="provider">Provider</option>
-            <option value="admin">Admin</option>
-          </select>
-          <div class="row">
-            <button type="button" id="loginBtn">Login</button>
-            <button type="button" id="registerBtn" class="secondary">Register</button>
-          </div>
-        </form>
-      </article>
+    <section class="card">
+      <h2>Search Providers</h2>
+      <form id="searchForm">
+        <select name="category" id="categorySelect"><option value="">All categories</option></select>
+        <input name="location" value="Bengaluru" placeholder="Location" />
+        <label><input type="checkbox" name="emergency" /> Emergency only</label>
+        <button>Search recommendations</button>
+      </form>
+    </section>
 
-      <article class="card workflow-card">
-        <h2>Smooth workflow</h2>
-        <ol class="steps">
-          <li><a href="search.html">Search providers</a> by category/location.</li>
-          <li><a href="bookings.html">Create and pay</a> a booking.</li>
-          <li><a href="reviews.html">Submit a review</a> after service.</li>
-          <li><a href="ml.html">Check review text</a> with integrated ML heuristics.</li>
-          <li><a href="admin.html">Verify providers</a> using admin login.</li>
-        </ol>
-      </article>
+    <section class="card wide">
+      <h2>Recommended Providers</h2>
+      <div id="providers" class="providers"></div>
+    </section>
+
+    <section class="card">
+      <h2>Create Booking</h2>
+      <form id="bookingForm">
+        <select name="providerId" id="providerSelect" required></select>
+        <input name="service" value="Fan installation" placeholder="Service" required />
+        <input name="scheduledAt" type="datetime-local" required />
+        <input name="address" value="MG Road, Bengaluru" placeholder="Address" required />
+        <label><input type="checkbox" name="emergency" /> Emergency booking</label>
+        <button>Create booking</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Bookings & Payment</h2>
+      <button id="refreshBookings">Refresh bookings</button>
+      <div id="bookings"></div>
+    </section>
+
+    <section class="card">
+      <h2>Submit Review</h2>
+      <form id="reviewForm">
+        <select name="providerId" id="reviewProviderSelect" required></select>
+        <input name="rating" type="number" min="1" max="5" value="5" required />
+        <textarea name="comment" required>Very professional and completed the service on time.</textarea>
+        <button>Submit review</button>
+      </form>
     </section>
   </main>
 
-  <footer><pre id="output">Ready. Login to continue.</pre></footer>
+  <footer>
+    <pre id="output">Ready. Start the backend with: cd backend && npm install && npm start</pre>
+  </footer>
   <script src="app.js"></script>
 </body>
 </html>

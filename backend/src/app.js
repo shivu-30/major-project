@@ -150,20 +150,6 @@ async function handler(req, res) {
       return send(res, 200, { providers: recommend(read().providers, { category: query.category, location: query.location, emergency: query.emergency === 'true' }) });
     }
 
-
-    if (req.method === 'POST' && pathname === '/api/ml/recommend') {
-      const body = await readBody(req);
-      const db = read();
-      const sourceProviders = Array.isArray(body.providers) ? body.providers : db.providers;
-      const providers = recommend(sourceProviders, { category: body.category, location: body.location, emergency: Boolean(body.emergency) });
-      return send(res, 200, { providers, engine: 'backend-integrated-heuristic' });
-    }
-
-    if (req.method === 'POST' && pathname === '/api/ml/detect-review') {
-      const body = await readBody(req);
-      return send(res, 200, { ...detectFakeReview(body.text || body.comment || ''), engine: 'backend-integrated-heuristic' });
-    }
-
     if (req.method === 'POST' && pathname === '/api/bookings') {
       const authUser = requireUser(req, res); if (!authUser) return;
       const body = await readBody(req);

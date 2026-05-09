@@ -1,171 +1,189 @@
 # Smart Local Service Finder with AI Recommendation
 
-Smart Local Service Finder is a runnable two-terminal full-stack demo for connecting customers with verified local service providers. The customer flow, search, booking/payment, reviews, admin tools, and ML-style review checks are now split into separate frontend pages while staying integrated through one backend pipeline.
+A proposed platform for connecting customers with verified local service providers using AI-powered recommendations, location-based matching, booking, reviews, payments, and provider verification.
 
-## Current Working Status
+## Current Working Status (Repository Audit)
 
-**Status as of May 9, 2026: two-terminal runnable application scaffold.**
+**Status as of May 9, 2026: Documentation and Firebase emulator configuration only.**
 
-The complete local demo now runs with only:
+This repository currently contains planning, setup, testing, Firebase, and deployment documentation plus a minimal Firebase emulator configuration. The executable application code described by the documentation is **not present in the repository at this time**.
 
-1. **Backend terminal** — Node.js API, local persistence, auth, provider search, booking, payment, admin, and integrated ML heuristic endpoints.
-2. **Frontend terminal** — One static frontend server with separate pages for Home/Login, Search, Bookings, Reviews, ML Check, and Admin.
+### What is present now
 
-No separate admin-dashboard terminal is required. No separate ML terminal is required for the normal app flow.
+- Project overview and requirements documentation.
+- Firebase setup guides and a `firebase.json` file configured for local Firestore Emulator and Emulator UI.
+- Deployment, testing, emulator setup, and quick-start documentation.
+- A Windows PowerShell helper script that checks prerequisites and prints setup steps.
 
-## Two-Terminal Run Commands
+### What is not present now
 
-Open the project root first:
+The README and supporting documents describe these application directories, but they are currently missing from the checked-in project:
 
-```bash
-cd /workspace/major-project
-```
+- `backend/` — Node.js/Express API source code.
+- `mobile/` — Flutter mobile app source code.
+- `ml-models/` — recommendation and review-detection model source code.
+- `admin-dashboard/` — admin web dashboard source code.
+- `docs/` — nested API/database documentation directory referenced by the old README.
 
-### Terminal 1: Backend
+Because these directories are absent, commands such as `cd backend && npm install`, `cd mobile && flutter pub get`, and `cd ml-models && pip install -r requirements.txt` cannot currently be run from this repository.
 
-```bash
-cd backend
-npm install
-npm start
-```
+## Backend Functionality Status
 
-Backend URL:
+### Backend parts that are functioning now
 
-```text
-http://localhost:3000
-```
+At the repository level, only the following backend-adjacent pieces are currently available:
 
-### Terminal 2: Frontend
+| Area | Current status |
+|------|----------------|
+| Firebase emulator config | Present. `firebase.json` configures the Firestore emulator on `localhost:8080` and Emulator UI on port `4000`. |
+| Backend setup documentation | Present. Setup guides describe expected Node.js, Firebase Admin SDK, environment variables, and health-check behavior. |
+| Firebase setup documentation | Present. Documentation explains Firebase project creation, Auth, Firestore, Storage, service-account credentials, and Google Maps API setup. |
+| Deployment/testing documentation | Present. Guides describe intended deployment and testing workflow. |
 
-From the project root:
+### Backend parts not functioning yet
 
-```bash
-python -m http.server 8088 --directory frontend
-```
+No backend runtime can be confirmed as working because the backend implementation files are not checked in. Specifically, the repository is missing:
 
-Frontend URL:
+- `backend/package.json` and dependency definitions.
+- Express server entry point such as `server.js`, `app.js`, or `src/index.js`.
+- API route files.
+- Controller files for authentication, users, providers, bookings, payments, reviews, or search.
+- Firebase Admin SDK initialization code.
+- Middleware for authentication, validation, error handling, CORS, rate limiting, or logging.
+- Payment integration code for Razorpay/Stripe.
+- ML API integration code.
+- Automated backend tests.
+- `.env.example` for backend configuration.
 
-```text
-http://localhost:8088
-```
+## Parts Yet to Be Completed to Make the Application Work
 
-Open this frontend URL and use the top navigation to move between separate pages for login, provider search, bookings, reviews, ML checking, and admin verification.
+### 1. Restore or create the backend application
 
-## Demo Accounts
+Create the `backend/` project with at least:
 
-| Role | Email | Password | What it can do |
-|------|-------|----------|----------------|
-| Customer | `customer@smartlocal.test` | `password` | Search, book, pay, review |
-| Admin | `admin@smartlocal.test` | `password` | Load admin dashboard and verify/unverify providers |
+- `package.json` with scripts such as `dev`, `start`, and `test`.
+- Express server setup and health endpoint.
+- Firebase Admin SDK configuration.
+- Environment template in `backend/.env.example`.
+- Authentication middleware and role-based access control.
+- Controllers/routes for:
+  - Authentication and user profiles.
+  - Service provider profiles and verification.
+  - Service search and filtering.
+  - Booking creation and status updates.
+  - Reviews and ratings.
+  - Payments and transaction records.
+  - Notifications/chat if they are in scope for the final version.
+- Validation, logging, centralized error handling, and security middleware.
+- Unit/integration tests for all critical API paths.
 
-## What Is Integrated in the Same Pipeline
+### 2. Restore or create the mobile application
 
-### Backend
+Create the `mobile/` Flutter app with:
 
-The backend is implemented in `backend/` using Node.js with the built-in HTTP server. It exposes all app APIs from the same process:
+- Firebase configuration files.
+- Login/signup flows.
+- Customer home/search/provider detail/booking screens.
+- Provider-side screens if required by the final submission.
+- API service layer connected to the backend.
+- State management and routing.
+- Widget and integration tests.
 
-| Area | Functioning endpoints/features |
-|------|--------------------------------|
-| Health | `GET /health` |
-| Auth | `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/me` |
-| Categories | `GET /api/categories` |
-| Providers | `GET /api/providers`, `POST /api/providers`, `PATCH /api/providers/:id/verify` |
-| Recommendations | `GET /api/recommendations` |
-| Integrated ML | `POST /api/ml/recommend`, `POST /api/ml/detect-review` |
-| Bookings | `POST /api/bookings`, `GET /api/bookings`, `PATCH /api/bookings/:id/status` |
-| Payments | `POST /api/payments` test capture flow |
-| Reviews | `POST /api/reviews`, `GET /api/reviews` with fake-review flagging |
-| Admin | `GET /api/admin/summary` |
+### 3. Restore or create the ML service
 
-### Frontend
+Create the `ml-models/` service with:
 
-The frontend in `frontend/` is now split into focused pages:
+- Recommendation endpoint for provider ranking.
+- Fake-review detection endpoint.
+- Training/inference scripts or documented mock implementation.
+- Model artifacts or reproducible training process.
+- API tests and sample requests.
 
-| Page | File | Purpose |
-|------|------|---------|
-| Home/Login | `frontend/index.html` | Login, registration, and workflow entry point |
-| Search | `frontend/search.html` | Provider recommendations and booking/review shortcuts |
-| Bookings | `frontend/bookings.html` | Booking creation, booking list, and test payments |
-| Reviews | `frontend/reviews.html` | Review submission and recent review status |
-| ML Check | `frontend/ml.html` | Fake-review heuristic check |
-| Admin | `frontend/admin.html` | Admin login, summary metrics, and provider verification |
+### 4. Restore or create the admin dashboard
 
-### Persistence
+Create `admin-dashboard/` with:
 
-The backend uses a local JSON data file for demo persistence. Runtime data is ignored by Git through `.gitignore`.
+- Admin authentication.
+- Provider verification workflow.
+- User/provider/booking management.
+- Review moderation screen.
+- Basic analytics dashboard.
 
-## Optional Docker Run
+### 5. Complete Firebase and production configuration
 
-If Docker is installed, this starts both the backend and frontend services together:
+Add or finalize:
 
-```bash
-docker compose up
-```
+- Firestore security rules.
+- Firestore indexes.
+- Storage rules.
+- Seed data or emulator import/export data.
+- CI/CD workflow.
+- Production deployment manifests or hosting configuration.
+- Secret-management instructions that do not commit private service-account keys.
 
-Then open:
+### 6. Validate end-to-end application flow
 
-```text
-http://localhost:8088
-```
+Before marking the project complete, verify:
 
-## Optional Standalone ML Service
+1. A customer can sign up and log in.
+2. A provider can register and complete a profile.
+3. A customer can search providers by category/location.
+4. Recommendation results are returned by the backend or ML service.
+5. A booking can be created, accepted, updated, and completed.
+6. A payment can be created or simulated in test mode.
+7. A review can be submitted and evaluated by the fake-review detector.
+8. Admin can review providers and moderate flagged reviews.
+9. The mobile app communicates with the backend successfully.
+10. Tests pass for backend, mobile, and ML modules.
 
-`ml-models/` remains as a standalone Flask reference service for future model deployment experiments, but it is **not required** to run the app. The normal frontend/backend flow uses the backend-integrated ML heuristic endpoints.
-
-## Testing
-
-### Backend tests
-
-```bash
-cd backend
-npm install
-npm test
-```
-
-### Manual smoke test
-
-1. Start the backend terminal.
-2. Start the frontend terminal.
-3. Open `http://localhost:8088`.
-4. Log in as `customer@smartlocal.test` / `password`.
-5. Open the **Search** page and search recommendations for Bengaluru.
-6. Open the **Bookings** page, create a booking, and pay it with the test payment button.
-7. Open the **Reviews** page and submit a review.
-8. Open the **ML Check** page and test review text.
-9. Open the **Admin** page, log in as `admin@smartlocal.test` / `password`, and click **Load admin dashboard**.
-10. Verify/unverify a provider.
-
-## Project Structure
+## Architecture Target
 
 ```text
 major-project/
-├── backend/                 # Node.js API, integrated admin/ML endpoints, tests
-├── frontend/                # Multi-page customer + admin + ML browser UI
-├── ml-models/               # Optional standalone Flask ML reference service
-├── firestore.rules          # Firestore security rules
-├── firebase.json            # Firebase emulator/rules configuration
-├── docker-compose.yml       # Optional backend + frontend orchestration
-├── .env.example             # Shared local environment template
-└── README.md                # Two-terminal run guide
+├── backend/                 # TODO: Node.js + Express + Firebase API
+├── mobile/                  # TODO: Flutter mobile app
+├── ml-models/               # TODO: AI recommendation/review detection service
+├── admin-dashboard/         # TODO: Admin web dashboard
+├── docs/                    # TODO: API/database docs if kept separate
+├── firebase.json            # Present: Firebase emulator configuration
+└── README.md                # Present: project status and setup overview
 ```
 
-## Parts Still Recommended Before Production
+## Technology Stack Target
 
-The application is runnable locally, but these items should be completed before production:
+| Component | Intended technology | Current repository status |
+|-----------|---------------------|---------------------------|
+| Mobile | Flutter, Dart | Not present |
+| Backend | Node.js, Express.js | Not present |
+| Database | Firebase Firestore | Emulator config present; schema/rules code not present |
+| Cloud | Firebase Auth, Storage, Functions, FCM | Documentation present; implementation not present |
+| AI/ML | Python, TensorFlow/Scikit-learn/NLTK | Not present |
+| Maps | Google Maps APIs | Documentation present; implementation not present |
+| Payment | Razorpay/Stripe | Documentation present; implementation not present |
+| Testing | Jest, Flutter Test, Pytest/Postman/JMeter | Documentation present; executable tests not present |
 
-1. Replace the JSON data store with Firestore repositories or another production database.
-2. Replace demo token logic with Firebase Auth or a hardened JWT implementation with refresh tokens.
-3. Replace demo password hashing with bcrypt/argon2 and enforce password policy.
-4. Replace heuristic ML endpoints with trained model artifacts or a deployed model service.
-5. Replace test payment capture with Razorpay/Stripe test and production flows.
-6. Add CI/CD workflows for backend tests, linting, security scans, and deployment.
-7. Remove, revoke, and rotate any checked-in Firebase service-account JSON credentials.
-8. Add full Firestore indexes, seed scripts, and emulator import/export fixtures.
-9. Add end-to-end browser tests for the unified frontend.
+## Available Setup Commands Today
+
+The only setup command that can be meaningfully run from the current repository is Firebase emulator startup, assuming Firebase CLI is installed:
+
+```bash
+firebase emulators:start
+```
+
+The documented backend/mobile/ML commands should be run only after those missing directories and files are added.
 
 ## Important Security Note
 
-A Firebase service-account JSON file is currently present in this repository. Service-account keys are sensitive credentials. For real deployment, remove the file from version control, revoke/rotate the key in Google Cloud/Firebase, and use environment-based secret management.
+A Firebase service-account JSON file is currently present in the repository. Service-account keys are sensitive credentials and should normally be removed from version control, revoked/rotated in Firebase/Google Cloud, and replaced with environment-based secret management.
+
+## Documentation Files
+
+- `SETUP_GUIDE.md` — setup walkthrough for intended backend, ML, mobile, and Firebase components.
+- `FIREBASE_SETUP.md`, `FIREBASE_SETUP_DETAILED.md`, `FIREBASE_SETUP_CHECKLIST.md` — Firebase configuration notes.
+- `EMULATOR_SETUP_GUIDE.md` — local emulator guidance.
+- `TESTING_GUIDE.md` — intended testing process.
+- `PRODUCTION_DEPLOYMENT_GUIDE.md`, `QUICK_START_DEPLOYMENT.md` — deployment guidance.
+- `PROJECT_DOCUMENTATION.md`, `PROJECT_SYNOPSIS.md`, `PROJECT_COMPLETION_SUMMARY.md`, `COMPLETION_REPORT.md` — project planning/completion narrative documents.
 
 ## License
 
@@ -173,5 +191,5 @@ This is an academic project for MCA degree completion.
 
 ---
 
-**Current Status:** Runnable two-terminal local full-stack demo.
+**Current Status:** Documentation/configuration scaffold only — implementation source code still needs to be added or restored.
 **Last Updated:** May 9, 2026
