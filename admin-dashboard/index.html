@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Admin Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Admin Dashboard</h1>
+      <p>Monitor platform totals and verify providers. Demo login: <code>admin@smartlocal.test</code> / <code>password</code>.</p>
+    </header>
+
+    <section class="panel">
+      <h2>Admin Login</h2>
+      <form id="loginForm">
+        <input name="email" type="email" value="admin@smartlocal.test" required />
+        <input name="password" type="password" value="password" required />
+        <button>Login as admin</button>
+      </form>
+    </section>
+
+    <section class="stats" id="stats"></section>
+
+    <section class="panel">
+      <h2>Provider Verification</h2>
+      <div id="providers"></div>
+    </section>
+
+    <pre id="output">Start backend first: cd backend && npm install && npm start</pre>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

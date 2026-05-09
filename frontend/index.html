@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Service Finder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav>
+      <strong>Smart Local Service Finder</strong>
+      <span id="sessionLabel">Guest</span>
+    </nav>
+    <section>
+      <h1>Find verified local service providers.</h1>
+      <p>Search, book, pay, and review electricians, plumbers, cleaners, carpenters, and AC technicians from one working demo UI.</p>
+    </section>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <h2>Login / Register</h2>
+      <form id="authForm">
+        <input name="name" placeholder="Name for registration" />
+        <input name="email" type="email" value="customer@smartlocal.test" placeholder="Email" required />
+        <input name="password" type="password" value="password" placeholder="Password" required />
+        <input name="phone" placeholder="Phone" />
+        <div class="row">
+          <button type="button" id="loginBtn">Login</button>
+          <button type="button" id="registerBtn">Register</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Search Providers</h2>
+      <form id="searchForm">
+        <select name="category" id="categorySelect"><option value="">All categories</option></select>
+        <input name="location" value="Bengaluru" placeholder="Location" />
+        <label><input type="checkbox" name="emergency" /> Emergency only</label>
+        <button>Search recommendations</button>
+      </form>
+    </section>
+
+    <section class="card wide">
+      <h2>Recommended Providers</h2>
+      <div id="providers" class="providers"></div>
+    </section>
+
+    <section class="card">
+      <h2>Create Booking</h2>
+      <form id="bookingForm">
+        <select name="providerId" id="providerSelect" required></select>
+        <input name="service" value="Fan installation" placeholder="Service" required />
+        <input name="scheduledAt" type="datetime-local" required />
+        <input name="address" value="MG Road, Bengaluru" placeholder="Address" required />
+        <label><input type="checkbox" name="emergency" /> Emergency booking</label>
+        <button>Create booking</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Bookings & Payment</h2>
+      <button id="refreshBookings">Refresh bookings</button>
+      <div id="bookings"></div>
+    </section>
+
+    <section class="card">
+      <h2>Submit Review</h2>
+      <form id="reviewForm">
+        <select name="providerId" id="reviewProviderSelect" required></select>
+        <input name="rating" type="number" min="1" max="5" value="5" required />
+        <textarea name="comment" required>Very professional and completed the service on time.</textarea>
+        <button>Submit review</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <pre id="output">Ready. Start the backend with: cd backend && npm install && npm start</pre>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
