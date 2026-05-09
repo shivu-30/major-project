@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Service Finder | Search</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="search">
+  <header class="app-header">
+    <nav class="top-nav">
+      <a class="brand" href="index.html">Smart Local Service Finder</a>
+      <button class="menu-toggle" id="menuToggle" type="button">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="search.html" data-nav="search">Search</a>
+        <a href="bookings.html" data-nav="bookings">Bookings</a>
+        <a href="reviews.html" data-nav="reviews">Reviews</a>
+        <a href="ml.html" data-nav="ml">ML Check</a>
+        <a href="admin.html" data-nav="admin">Admin</a>
+      </div>
+      <span id="sessionLabel" class="session-pill">Guest</span>
+    </nav>
+    <section class="hero compact"><p class="eyebrow">Provider discovery</p><h1>Search and compare recommended providers.</h1></section>
+  </header>
+  <main class="page-shell">
+    <section class="card">
+      <h2>Search Providers</h2>
+      <form id="searchForm" class="inline-form">
+        <select name="category" id="categorySelect"><option value="">All categories</option></select>
+        <input name="location" value="Bengaluru" placeholder="Location" />
+        <label class="checkbox"><input type="checkbox" name="emergency" /> Emergency only</label>
+        <button>Search recommendations</button>
+      </form>
+    </section>
+    <section class="card">
+      <div class="section-title"><h2>Recommended Providers</h2><a class="button-link" href="bookings.html">Go to booking</a></div>
+      <div id="providers" class="providers"></div>
+    </section>
+  </main>
+  <footer><pre id="output">Search results will appear here.</pre></footer>
+  <script src="app.js"></script>
+</body>
+</html>
