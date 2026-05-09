@@ -22,7 +22,14 @@
     </section>
   </header>
 
-  <main class="grid">
+  <main>
+    <section class="login-view" id="loginView">
+      <div class="login-copy">
+        <p class="eyebrow">Start here</p>
+        <h2>Login first to open your service dashboard.</h2>
+        <p>After sign in, you can search providers, choose one, schedule a booking, make a test payment, and submit a review from the dashboard.</p>
+      </div>
+      <div class="grid auth-grid">
     <section class="card auth-card" id="authCard">
       <div class="section-heading">
         <div>
@@ -74,7 +81,25 @@
       <p id="authHint" class="form-hint">Password for demo accounts: <strong>password</strong></p>
     </section>
 
-    <section class="card feature-card requires-auth">
+      </div>
+    </section>
+
+    <section class="dashboard hidden" id="dashboardView" aria-live="polite">
+      <div class="dashboard-heading">
+        <div>
+          <p class="eyebrow">Dashboard</p>
+          <h2>Choose a provider, schedule service, then review.</h2>
+          <p class="muted" id="dashboardIntro">Your logged-in workflow is ready.</p>
+        </div>
+        <div class="dashboard-actions" aria-label="Dashboard shortcuts">
+          <button type="button" class="secondary compact" data-scroll-target="searchForm">Search</button>
+          <button type="button" class="secondary compact" data-scroll-target="bookingForm">Schedule</button>
+          <button type="button" class="secondary compact" data-scroll-target="reviewForm">Review</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="card feature-card requires-auth">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Discovery</p>
@@ -151,11 +176,11 @@
         <button>Submit review</button>
       </form>
     </section>
+      </div>
+    </section>
   </main>
 
-  <footer>
-    <pre id="output">Ready. Start the backend with: cd backend && npm install && npm start</pre>
-  </footer>
+  <div id="statusMessage" class="status-message" role="status">Ready. Login to continue.</div>
   <script src="app.js"></script>
 </body>
 </html>
