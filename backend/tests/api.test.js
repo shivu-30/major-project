@@ -83,5 +83,5 @@ test('admin summary is protected', async () => {
 
   const summary = await api('/api/admin/summary', { headers: { Authorization: `Bearer ${login.body.token}` } });
   assert.equal(summary.res.status, 200);
-  assert.equal(summary.body.providers, 3);
+  assert.equal(summary.body.providers, 10);
 });
