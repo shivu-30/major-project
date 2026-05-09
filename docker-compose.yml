@@ -1,0 +1,23 @@
+services:
+  backend:
+    image: node:20-alpine
+    working_dir: /app/backend
+    command: sh -c "npm install && npm start"
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATA_FILE=/app/backend/src/data/app-data.json
+      - ML_API_URL=http://ml-models:5000
+    volumes:
+      - .:/app
+
+  ml-models:
+    image: python:3.11-slim
+    working_dir: /app/ml-models
+    command: sh -c "pip install -r requirements.txt && python model_api.py"
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app
