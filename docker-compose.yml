@@ -9,16 +9,15 @@ services:
       - NODE_ENV=development
       - PORT=3000
       - DATA_FILE=/app/backend/src/data/app-data.json
+      - ML_API_URL=http://ml-models:5000
     volumes:
       - .:/app
 
-  frontend:
+  ml-models:
     image: python:3.11-slim
-    working_dir: /app
-    command: python -m http.server 8088 --directory frontend
+    working_dir: /app/ml-models
+    command: sh -c "pip install -r requirements.txt && python model_api.py"
     ports:
-      - "8088:8088"
+      - "5000:5000"
     volumes:
       - .:/app
-    depends_on:
-      - backend

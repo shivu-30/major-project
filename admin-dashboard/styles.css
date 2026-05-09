@@ -1,0 +1,12 @@
+body { margin:0; font-family:Inter, system-ui, sans-serif; background:#f6f7fb; color:#101828; }
+main { max-width:1100px; margin:auto; padding:32px 20px; }
+header { background:#111827; color:white; border-radius:24px; padding:28px; margin-bottom:18px; }
+.panel, .stat { background:white; border:1px solid #dde3ee; border-radius:18px; padding:18px; margin-bottom:18px; box-shadow:0 12px 32px rgba(16,24,40,.07); }
+form { display:grid; grid-template-columns:1fr 1fr auto; gap:10px; }
+input, button { padding:12px 14px; border-radius:10px; border:1px solid #cdd5e1; font:inherit; }
+button { background:#2457d6; color:white; border:0; font-weight:700; cursor:pointer; }
+.stats { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; }
+.stat strong { display:block; font-size:32px; }
+.provider { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid #edf1f7; padding:12px 0; }
+pre { white-space:pre-wrap; background:#111827; color:#e5eefb; border-radius:16px; padding:16px; }
+@media (max-width:700px) { form, .provider { grid-template-columns:1fr; display:grid; } }
