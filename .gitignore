@@ -53,3 +53,6 @@ coverage/
 *.tmp
 *.temp
 .cache/
+
+# Local demo persistence
+backend/src/data/app-data.json

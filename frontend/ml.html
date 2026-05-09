@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Service Finder | ML Check</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="ml">
+  <header class="app-header">
+    <nav class="top-nav">
+      <a class="brand" href="index.html">Smart Local Service Finder</a>
+      <button class="menu-toggle" id="menuToggle" type="button">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="search.html" data-nav="search">Search</a>
+        <a href="bookings.html" data-nav="bookings">Bookings</a>
+        <a href="reviews.html" data-nav="reviews">Reviews</a>
+        <a href="ml.html" data-nav="ml">ML Check</a>
+        <a href="admin.html" data-nav="admin">Admin</a>
+      </div>
+      <span id="sessionLabel" class="session-pill">Guest</span>
+    </nav>
+    <section class="hero compact"><p class="eyebrow">Integrated ML</p><h1>Check review authenticity without a separate ML terminal.</h1></section>
+  </header>
+  <main class="page-shell split-layout">
+    <section class="card">
+      <h2>Fake Review Detection</h2>
+      <p class="muted">This calls the backend-integrated heuristic endpoint.</p>
+      <form id="mlForm">
+        <textarea name="text" required>Very professional and completed the service on time.</textarea>
+        <button>Detect fake review</button>
+      </form>
+    </section>
+    <section class="card result-card">
+      <h2>Result</h2>
+      <div id="mlResult" class="empty-state">Submit text to see a confidence score.</div>
+    </section>
+  </main>
+  <footer><pre id="output">ML check responses will appear here.</pre></footer>
+  <script src="app.js"></script>
+</body>
+</html>

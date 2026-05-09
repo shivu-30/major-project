@@ -1,0 +1,17 @@
+{
+  "name": "smart-service-finder-backend",
+  "version": "1.0.0",
+  "description": "Backend API for Smart Local Service Finder",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test tests/*.test.js"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}

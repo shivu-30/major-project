@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Service Finder | Admin</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-page="admin">
+  <header class="app-header">
+    <nav class="top-nav">
+      <a class="brand" href="index.html">Smart Local Service Finder</a>
+      <button class="menu-toggle" id="menuToggle" type="button">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="index.html" data-nav="home">Home</a>
+        <a href="search.html" data-nav="search">Search</a>
+        <a href="bookings.html" data-nav="bookings">Bookings</a>
+        <a href="reviews.html" data-nav="reviews">Reviews</a>
+        <a href="ml.html" data-nav="ml">ML Check</a>
+        <a href="admin.html" data-nav="admin">Admin</a>
+      </div>
+      <span id="sessionLabel" class="session-pill">Guest</span>
+    </nav>
+    <section class="hero compact"><p class="eyebrow">Admin dashboard</p><h1>Verify providers and monitor platform totals.</h1></section>
+  </header>
+  <main class="page-shell">
+    <section class="split-layout">
+      <article class="card">
+        <h2>Admin Login</h2>
+        <p class="muted">Use <code>admin@smartlocal.test</code> / <code>password</code>.</p>
+        <form id="authForm">
+          <input name="name" value="System Admin" placeholder="Name" />
+          <input name="email" type="email" value="admin@smartlocal.test" placeholder="Email" required />
+          <input name="password" type="password" value="password" placeholder="Password" required />
+          <input name="phone" value="+91-9000000000" placeholder="Phone" />
+          <input name="role" type="hidden" value="admin" />
+          <div class="row">
+            <button type="button" id="loginBtn">Login</button>
+            <button type="button" id="registerBtn" class="secondary">Register admin</button>
+          </div>
+        </form>
+      </article>
+      <article class="card notice">
+        <span>After admin login, load platform metrics and provider verification controls.</span>
+        <button id="loadAdmin">Load admin dashboard</button>
+      </article>
+    </section>
+    <section class="card">
+      <h2>Platform Summary</h2>
+      <div id="adminStats" class="stats"></div>
+    </section>
+    <section class="card">
+      <h2>Provider Verification</h2>
+      <div id="adminProviders"></div>
+    </section>
+  </main>
+  <footer><pre id="output">Admin responses will appear here.</pre></footer>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,24 @@
+services:
+  backend:
+    image: node:20-alpine
+    working_dir: /app/backend
+    command: sh -c "npm install && npm start"
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - DATA_FILE=/app/backend/src/data/app-data.json
+    volumes:
+      - .:/app
+
+  frontend:
+    image: python:3.11-slim
+    working_dir: /app
+    command: python -m http.server 8088 --directory frontend
+    ports:
+      - "8088:8088"
+    volumes:
+      - .:/app
+    depends_on:
+      - backend
