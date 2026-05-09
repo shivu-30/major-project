@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Smart Local Service Finder</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <nav>
+      <strong>Smart Local Service Finder</strong>
+      <span id="sessionLabel">Guest</span>
+    </nav>
+    <section>
+      <h1>One frontend for customers, providers, admin, booking, payment, and ML checks.</h1>
+      <p>Run only the backend terminal and this frontend terminal. The admin tools and ML heuristics are integrated into the same web app and backend pipeline.</p>
+    </section>
+  </header>
+
+  <main class="grid">
+    <section class="card wide notice">
+      <strong>Two-terminal workflow:</strong>
+      <code>cd backend &amp;&amp; npm start</code>
+      <span>+</span>
+      <code>python -m http.server 8088 --directory frontend</code>
+    </section>
+
+    <section class="card">
+      <h2>Login / Register</h2>
+      <p class="muted">Customer demo: <code>customer@smartlocal.test</code> / <code>password</code>. Admin demo: <code>admin@smartlocal.test</code> / <code>password</code>.</p>
+      <form id="authForm">
+        <input name="name" placeholder="Name for registration" />
+        <input name="email" type="email" value="customer@smartlocal.test" placeholder="Email" required />
+        <input name="password" type="password" value="password" placeholder="Password" required />
+        <input name="phone" placeholder="Phone" />
+        <select name="role">
+          <option value="customer">Customer</option>
+          <option value="provider">Provider</option>
+          <option value="admin">Admin</option>
+        </select>
+        <div class="row">
+          <button type="button" id="loginBtn">Login</button>
+          <button type="button" id="registerBtn">Register</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Search Providers</h2>
+      <form id="searchForm">
+        <select name="category" id="categorySelect"><option value="">All categories</option></select>
+        <input name="location" value="Bengaluru" placeholder="Location" />
+        <label><input type="checkbox" name="emergency" /> Emergency only</label>
+        <button>Search recommendations</button>
+      </form>
+    </section>
+
+    <section class="card wide">
+      <h2>Recommended Providers</h2>
+      <div id="providers" class="providers"></div>
+    </section>
+
+    <section class="card">
+      <h2>Create Booking</h2>
+      <form id="bookingForm">
+        <select name="providerId" id="providerSelect" required></select>
+        <input name="service" value="Fan installation" placeholder="Service" required />
+        <input name="scheduledAt" type="datetime-local" required />
+        <input name="address" value="MG Road, Bengaluru" placeholder="Address" required />
+        <label><input type="checkbox" name="emergency" /> Emergency booking</label>
+        <button>Create booking</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Bookings & Payment</h2>
+      <button id="refreshBookings">Refresh bookings</button>
+      <div id="bookings"></div>
+    </section>
+
+    <section class="card">
+      <h2>Submit Review</h2>
+      <form id="reviewForm">
+        <select name="providerId" id="reviewProviderSelect" required></select>
+        <input name="rating" type="number" min="1" max="5" value="5" required />
+        <textarea name="comment" required>Very professional and completed the service on time.</textarea>
+        <button>Submit review</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Integrated ML Check</h2>
+      <p class="muted">This calls the backend-integrated ML heuristic, so no separate ML terminal is required.</p>
+      <form id="mlForm">
+        <textarea name="text" required>Very professional and completed the service on time.</textarea>
+        <button>Detect fake review</button>
+      </form>
+      <div id="mlResult"></div>
+    </section>
+
+    <section class="card wide admin-panel">
+      <div class="section-title">
+        <div>
+          <h2>Integrated Admin Panel</h2>
+          <p class="muted">Login with the admin demo account in the same app to load summary metrics and verify providers.</p>
+        </div>
+        <button id="loadAdmin">Load admin dashboard</button>
+      </div>
+      <div id="adminStats" class="stats"></div>
+      <div id="adminProviders"></div>
+    </section>
+  </main>
+
+  <footer>
+    <pre id="output">Ready. Start the backend with: cd backend && npm start</pre>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
