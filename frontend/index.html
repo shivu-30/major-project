@@ -10,68 +10,144 @@
   <header class="hero">
     <nav>
       <strong>Smart Local Service Finder</strong>
-      <span id="sessionLabel">Guest</span>
+      <div class="session-pill">
+        <span id="sessionLabel">Guest</span>
+        <button type="button" id="logoutBtn" class="ghost hidden">Logout</button>
+      </div>
     </nav>
     <section>
-      <h1>Find verified local service providers.</h1>
-      <p>Search, book, pay, and review electricians, plumbers, cleaners, carpenters, and AC technicians from one working demo UI.</p>
+      <p class="eyebrow">Verified local help in minutes</p>
+      <h1>Find, book, pay, and review trusted service providers.</h1>
+      <p>Use the demo credentials or register a new account to unlock recommendations, bookings, payment simulation, review moderation, and admin-ready provider workflows.</p>
     </section>
   </header>
 
   <main class="grid">
-    <section class="card">
-      <h2>Login / Register</h2>
-      <form id="authForm">
-        <input name="name" placeholder="Name for registration" />
-        <input name="email" type="email" value="customer@smartlocal.test" placeholder="Email" required />
-        <input name="password" type="password" value="password" placeholder="Password" required />
-        <input name="phone" placeholder="Phone" />
-        <div class="row">
-          <button type="button" id="loginBtn">Login</button>
-          <button type="button" id="registerBtn">Register</button>
+    <section class="card auth-card" id="authCard">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Account access</p>
+          <h2>Login / Register</h2>
         </div>
+        <span class="status-dot" id="authStatus">Signed out</span>
+      </div>
+
+      <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+        <button type="button" id="loginTab" class="tab active" aria-selected="true">Login</button>
+        <button type="button" id="registerTab" class="tab" aria-selected="false">Register</button>
+      </div>
+
+      <form id="authForm" novalidate>
+        <div class="register-only hidden">
+          <label for="nameInput">Full name</label>
+          <input id="nameInput" name="name" autocomplete="name" placeholder="Name for registration" />
+        </div>
+
+        <label for="emailInput">Email address</label>
+        <input id="emailInput" name="email" type="email" value="customer@smartlocal.test" autocomplete="email" placeholder="Email" required />
+
+        <label for="passwordInput">Password</label>
+        <div class="password-field">
+          <input id="passwordInput" name="password" type="password" value="password" autocomplete="current-password" placeholder="Password" required minlength="6" />
+          <button type="button" id="togglePassword" class="secondary compact" aria-label="Show password">Show</button>
+        </div>
+
+        <div class="register-only hidden">
+          <label for="phoneInput">Phone number</label>
+          <input id="phoneInput" name="phone" autocomplete="tel" placeholder="Phone" />
+
+          <label for="roleInput">Account type</label>
+          <select id="roleInput" name="role">
+            <option value="customer">Customer</option>
+            <option value="provider">Provider</option>
+          </select>
+        </div>
+
+        <button type="submit" id="authSubmit">Login</button>
       </form>
+
+      <div class="demo-logins" aria-label="Demo login shortcuts">
+        <p class="muted">Demo accounts</p>
+        <button type="button" class="secondary demo-login" data-email="customer@smartlocal.test">Customer</button>
+        <button type="button" class="secondary demo-login" data-email="admin@smartlocal.test">Admin</button>
+      </div>
+      <p id="authHint" class="form-hint">Password for demo accounts: <strong>password</strong></p>
     </section>
 
-    <section class="card">
-      <h2>Search Providers</h2>
+    <section class="card feature-card requires-auth">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Discovery</p>
+          <h2>Search Providers</h2>
+        </div>
+      </div>
       <form id="searchForm">
+        <label for="categorySelect">Category</label>
         <select name="category" id="categorySelect"><option value="">All categories</option></select>
-        <input name="location" value="Bengaluru" placeholder="Location" />
-        <label><input type="checkbox" name="emergency" /> Emergency only</label>
+        <label for="locationInput">Location</label>
+        <input id="locationInput" name="location" value="Bengaluru" placeholder="Location" />
+        <label class="check"><input type="checkbox" name="emergency" /> Emergency only</label>
         <button>Search recommendations</button>
       </form>
     </section>
 
-    <section class="card wide">
-      <h2>Recommended Providers</h2>
+    <section class="card wide requires-auth">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">AI-ranked results</p>
+          <h2>Recommended Providers</h2>
+        </div>
+        <span class="status-dot" id="providerCount">0 providers</span>
+      </div>
       <div id="providers" class="providers"></div>
     </section>
 
-    <section class="card">
-      <h2>Create Booking</h2>
+    <section class="card requires-auth">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Scheduling</p>
+          <h2>Create Booking</h2>
+        </div>
+      </div>
       <form id="bookingForm">
+        <label for="providerSelect">Provider</label>
         <select name="providerId" id="providerSelect" required></select>
-        <input name="service" value="Fan installation" placeholder="Service" required />
-        <input name="scheduledAt" type="datetime-local" required />
-        <input name="address" value="MG Road, Bengaluru" placeholder="Address" required />
-        <label><input type="checkbox" name="emergency" /> Emergency booking</label>
+        <label for="serviceInput">Service required</label>
+        <input id="serviceInput" name="service" value="Fan installation" placeholder="Service" required />
+        <label for="scheduledAtInput">Scheduled date and time</label>
+        <input id="scheduledAtInput" name="scheduledAt" type="datetime-local" required />
+        <label for="addressInput">Address</label>
+        <input id="addressInput" name="address" value="MG Road, Bengaluru" placeholder="Address" required />
+        <label class="check"><input type="checkbox" name="emergency" /> Emergency booking</label>
         <button>Create booking</button>
       </form>
     </section>
 
-    <section class="card">
-      <h2>Bookings & Payment</h2>
-      <button id="refreshBookings">Refresh bookings</button>
+    <section class="card requires-auth">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Checkout</p>
+          <h2>Bookings & Payment</h2>
+        </div>
+        <button type="button" id="refreshBookings" class="secondary compact">Refresh</button>
+      </div>
       <div id="bookings"></div>
     </section>
 
-    <section class="card">
-      <h2>Submit Review</h2>
+    <section class="card requires-auth">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Trust & safety</p>
+          <h2>Submit Review</h2>
+        </div>
+      </div>
       <form id="reviewForm">
+        <label for="reviewProviderSelect">Provider</label>
         <select name="providerId" id="reviewProviderSelect" required></select>
-        <input name="rating" type="number" min="1" max="5" value="5" required />
-        <textarea name="comment" required>Very professional and completed the service on time.</textarea>
+        <label for="ratingInput">Rating</label>
+        <input id="ratingInput" name="rating" type="number" min="1" max="5" value="5" required />
+        <label for="commentInput">Review comment</label>
+        <textarea id="commentInput" name="comment" required>Very professional and completed the service on time.</textarea>
         <button>Submit review</button>
       </form>
     </section>
