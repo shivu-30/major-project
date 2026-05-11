@@ -28,60 +28,63 @@
         <p class="eyebrow">Start here</p>
         <h2>Login first to open your service dashboard.</h2>
         <p>After sign in, you can search providers, choose one, schedule a booking, make a test payment, and submit a review from the dashboard.</p>
-      </div>
-      <div class="grid auth-grid">
-    <section class="card auth-card" id="authCard">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">Account access</p>
-          <h2>Login / Register</h2>
-        </div>
-        <span class="status-dot" id="authStatus">Signed out</span>
+        <ul class="access-list" aria-label="Dashboard features available after login">
+          <li><span>1</span>Search verified providers near your location.</li>
+          <li><span>2</span>Schedule bookings and complete a test payment.</li>
+          <li><span>3</span>Submit trusted reviews from one clean dashboard.</li>
+        </ul>
       </div>
 
-      <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
-        <button type="button" id="loginTab" class="tab active" aria-selected="true">Login</button>
-        <button type="button" id="registerTab" class="tab" aria-selected="false">Register</button>
-      </div>
-
-      <form id="authForm" novalidate>
-        <div class="register-only hidden">
-          <label for="nameInput">Full name</label>
-          <input id="nameInput" name="name" autocomplete="name" placeholder="Name for registration" />
+      <section class="card auth-card" id="authCard">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Account access</p>
+            <h2>Login / Register</h2>
+          </div>
+          <span class="status-dot" id="authStatus">Signed out</span>
         </div>
 
-        <label for="emailInput">Email address</label>
-        <input id="emailInput" name="email" type="email" value="customer@smartlocal.test" autocomplete="email" placeholder="Email" required />
-
-        <label for="passwordInput">Password</label>
-        <div class="password-field">
-          <input id="passwordInput" name="password" type="password" value="password" autocomplete="current-password" placeholder="Password" required minlength="6" />
-          <button type="button" id="togglePassword" class="secondary compact" aria-label="Show password">Show</button>
+        <div class="auth-tabs" role="tablist" aria-label="Authentication mode">
+          <button type="button" id="loginTab" class="tab active" aria-selected="true">Login</button>
+          <button type="button" id="registerTab" class="tab" aria-selected="false">Register</button>
         </div>
 
-        <div class="register-only hidden">
-          <label for="phoneInput">Phone number</label>
-          <input id="phoneInput" name="phone" autocomplete="tel" placeholder="Phone" />
+        <form id="authForm" novalidate>
+          <div class="register-only hidden">
+            <label for="nameInput">Full name</label>
+            <input id="nameInput" name="name" autocomplete="name" placeholder="Name for registration" />
+          </div>
 
-          <label for="roleInput">Account type</label>
-          <select id="roleInput" name="role">
-            <option value="customer">Customer</option>
-            <option value="provider">Provider</option>
-          </select>
+          <label for="emailInput">Email address</label>
+          <input id="emailInput" name="email" type="email" value="customer@smartlocal.test" autocomplete="email" placeholder="Email" required />
+
+          <label for="passwordInput">Password</label>
+          <div class="password-field">
+            <input id="passwordInput" name="password" type="password" value="password" autocomplete="current-password" placeholder="Password" required minlength="6" />
+            <button type="button" id="togglePassword" class="secondary compact" aria-label="Show password">Show</button>
+          </div>
+
+          <div class="register-only hidden">
+            <label for="phoneInput">Phone number</label>
+            <input id="phoneInput" name="phone" autocomplete="tel" placeholder="Phone" />
+
+            <label for="roleInput">Account type</label>
+            <select id="roleInput" name="role">
+              <option value="customer">Customer</option>
+              <option value="provider">Provider</option>
+            </select>
+          </div>
+
+          <button type="submit" id="authSubmit">Login</button>
+        </form>
+
+        <div class="demo-logins" aria-label="Demo login shortcuts">
+          <p class="muted">Demo accounts</p>
+          <button type="button" class="secondary demo-login" data-email="customer@smartlocal.test">Customer</button>
+          <button type="button" class="secondary demo-login" data-email="admin@smartlocal.test">Admin</button>
         </div>
-
-        <button type="submit" id="authSubmit">Login</button>
-      </form>
-
-      <div class="demo-logins" aria-label="Demo login shortcuts">
-        <p class="muted">Demo accounts</p>
-        <button type="button" class="secondary demo-login" data-email="customer@smartlocal.test">Customer</button>
-        <button type="button" class="secondary demo-login" data-email="admin@smartlocal.test">Admin</button>
-      </div>
-      <p id="authHint" class="form-hint">Password for demo accounts: <strong>password</strong></p>
-    </section>
-
-      </div>
+        <p id="authHint" class="form-hint">Password for demo accounts: <strong>password</strong></p>
+      </section>
     </section>
 
     <section class="dashboard hidden" id="dashboardView" aria-live="polite">
