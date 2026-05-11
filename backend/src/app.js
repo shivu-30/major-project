@@ -52,6 +52,24 @@ function requireAdmin(req, res) {
   return user;
 }
 
+
+function recalculateProviderRating(db, providerId) {
+  const provider = db.providers.find((item) => item.id === providerId);
+  if (!provider) return null;
+  const published = db.reviews.filter((item) => item.providerId === providerId && item.status === 'published');
+  provider.reviewCount = published.length;
+  provider.rating = published.length ? Number((published.reduce((sum, item) => sum + item.rating, 0) / published.length).toFixed(1)) : 0;
+  return provider;
+}
+
+function canSeeReview(review, authUser) {
+  return review.status === 'published' || authUser?.role === 'admin' || review.customerId === authUser?.id;
+}
+
+function hasPaidBookingForProvider(db, customerId, providerId) {
+  return db.bookings.some((booking) => booking.customerId === customerId && booking.providerId === providerId && booking.paymentStatus === 'paid');
+}
+
 function pathMatch(pathname, pattern) {
   const pathParts = pathname.split('/').filter(Boolean);
   const patternParts = pattern.split('/').filter(Boolean);
@@ -199,23 +217,49 @@ async function handler(req, res) {
     if (req.method === 'POST' && pathname === '/api/reviews') {
       const authUser = requireUser(req, res); if (!authUser) return;
       const body = await readBody(req);
-      if (!body.providerId || !body.rating || !body.comment) return send(res, 400, { error: 'providerId, rating, and comment are required' });
+      const rating = Number(body.rating);
+      const comment = String(body.comment || '').trim();
+      if (!body.providerId || !body.rating || !comment) return send(res, 400, { error: 'providerId, rating, and comment are required' });
+      if (!Number.isInteger(rating) || rating < 1 || rating > 5) return send(res, 400, { error: 'rating must be an integer from 1 to 5' });
+      if (authUser.role !== 'customer') return send(res, 403, { error: 'Only customers can submit provider reviews' });
       const db = read();
       const provider = db.providers.find((item) => item.id === body.providerId);
       if (!provider) return send(res, 404, { error: 'Provider not found' });
-      const moderation = detectFakeReview(body.comment);
-      const review = { id: id('review'), providerId: body.providerId, customerId: authUser.id, rating: Number(body.rating), comment: body.comment, moderation, status: moderation.isSuspicious ? 'flagged' : 'published', createdAt: new Date().toISOString() };
+      if (!hasPaidBookingForProvider(db, authUser.id, body.providerId)) return send(res, 409, { error: 'Complete payment for a booking with this provider before reviewing' });
+      if (db.reviews.some((item) => item.providerId === body.providerId && item.customerId === authUser.id)) return send(res, 409, { error: 'You have already reviewed this provider' });
+      const moderation = detectFakeReview(comment);
+      const review = { id: id('review'), providerId: body.providerId, customerId: authUser.id, rating, comment, moderation, status: moderation.isSuspicious ? 'flagged' : 'published', createdAt: new Date().toISOString() };
       db.reviews.push(review);
-      const published = db.reviews.filter((item) => item.providerId === body.providerId && item.status === 'published');
-      provider.reviewCount = published.length;
-      provider.rating = published.length ? Number((published.reduce((sum, item) => sum + item.rating, 0) / published.length).toFixed(1)) : provider.rating;
+      recalculateProviderRating(db, body.providerId);
       write(db);
       return send(res, 201, { review });
     }
 
     if (req.method === 'GET' && pathname === '/api/reviews') {
-      const reviews = read().reviews.filter((review) => !query.providerId || review.providerId === query.providerId);
+      const authUser = getUser(req);
+      const db = read();
+      const reviews = db.reviews
+        .filter((review) => !query.providerId || review.providerId === query.providerId)
+        .filter((review) => canSeeReview(review, authUser))
+        .map((review) => ({ ...review, providerName: db.providers.find((provider) => provider.id === review.providerId)?.name || 'Unknown provider' }))
+        .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       return send(res, 200, { reviews });
+    }
+
+    const reviewModerationParams = pathMatch(pathname, '/api/reviews/:id/status');
+    if (req.method === 'PATCH' && reviewModerationParams) {
+      const admin = requireAdmin(req, res); if (!admin) return;
+      const body = await readBody(req);
+      if (!['published', 'flagged', 'rejected'].includes(body.status)) return send(res, 400, { error: 'Invalid review status' });
+      const db = read();
+      const review = db.reviews.find((item) => item.id === reviewModerationParams.id);
+      if (!review) return send(res, 404, { error: 'Review not found' });
+      review.status = body.status;
+      review.moderatedBy = admin.id;
+      review.moderatedAt = new Date().toISOString();
+      recalculateProviderRating(db, review.providerId);
+      write(db);
+      return send(res, 200, { review });
     }
 
     if (req.method === 'GET' && pathname === '/api/admin/summary') {

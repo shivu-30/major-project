@@ -85,3 +85,66 @@ test('admin summary is protected', async () => {
   assert.equal(summary.res.status, 200);
   assert.equal(summary.body.providers, 10);
 });
+
+test('review workflow requires paid booking and supports moderation', async () => {
+  const login = await api('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email: 'customer@smartlocal.test', password: 'password' })
+  });
+  assert.equal(login.res.status, 200);
+  const token = login.body.token;
+
+  const earlyReview = await api('/api/reviews', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ providerId: 'provider-1', rating: 5, comment: 'Excellent work before payment should not pass.' })
+  });
+  assert.equal(earlyReview.res.status, 409);
+
+  const booking = await api('/api/bookings', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ providerId: 'provider-1', service: 'Fan installation', scheduledAt: '2026-05-10T10:00:00.000Z', address: 'MG Road, Bengaluru' })
+  });
+  assert.equal(booking.res.status, 201);
+
+  const payment = await api('/api/payments', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ bookingId: booking.body.booking.id, amount: booking.body.booking.priceEstimate })
+  });
+  assert.equal(payment.res.status, 201);
+
+  const flagged = await api('/api/reviews', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${token}` },
+    body: JSON.stringify({ providerId: 'provider-1', rating: 1, comment: 'best best best guaranteed 100% real' })
+  });
+  assert.equal(flagged.res.status, 201);
+  assert.equal(flagged.body.review.status, 'flagged');
+
+  const ownReviews = await api('/api/reviews', { headers: { Authorization: `Bearer ${token}` } });
+  assert.equal(ownReviews.res.status, 200);
+  assert.equal(ownReviews.body.reviews.length, 1);
+  assert.equal(ownReviews.body.reviews[0].providerName, 'Ravi Electricals');
+
+  const publicReviews = await api('/api/reviews');
+  assert.equal(publicReviews.res.status, 200);
+  assert.equal(publicReviews.body.reviews.length, 0);
+
+  const adminLogin = await api('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({ email: 'admin@smartlocal.test', password: 'password' })
+  });
+  const moderated = await api(`/api/reviews/${flagged.body.review.id}/status`, {
+    method: 'PATCH',
+    headers: { Authorization: `Bearer ${adminLogin.body.token}` },
+    body: JSON.stringify({ status: 'published' })
+  });
+  assert.equal(moderated.res.status, 200);
+  assert.equal(moderated.body.review.status, 'published');
+
+  const publishedReviews = await api('/api/reviews');
+  assert.equal(publishedReviews.res.status, 200);
+  assert.equal(publishedReviews.body.reviews.length, 1);
+});
